@@ -1,3 +1,7 @@
 import { crawl } from './crawl.js';
 
-crawl('http://localhost:8080');
+async function crawlSite() {
+    const crawlEmitter = crawl('http://localhost:8080');
+}
+
+crawlSite();
