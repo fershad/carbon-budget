@@ -20,11 +20,7 @@ export const crawl = (siteUrl) => {
     urls.push(url);
   });
 
-  crawler.on('complete', () => { console.log('complete', urls); });
-
-  crawler.on('fetcherror', emitWarning);
-  crawler.on('fetch404', emitWarning);
-  crawler.on('fetch410', emitWarning);
+  crawler.on('complete', () => urls);
 
   crawler.start();
 };
