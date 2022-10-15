@@ -1,5 +1,5 @@
 import Crawler from 'simplecrawler';
-import { runLighthouse, writeLHResult } from './lh.js';
+import { runLighthouse, writeLHResult, analyseTransfer } from './lh.js';
 
 const lighthouse = runLighthouse
 const urls = []
@@ -28,6 +28,8 @@ export const crawl = (siteUrl) => {
     for (const url of urls) {
       const result = await lighthouse(url);
       await writeLHResult(result, url);
+      const transfer = analyseTransfer(result.lhr);
+      console.log(transfer);
     }
   });
 

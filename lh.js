@@ -22,7 +22,7 @@ const SECONDS = 1000;
   desktopConfig.settings.maxWaitForFcp = 180 * SECONDS;
   desktopConfig.settings.maxWaitForLoad = 180 * SECONDS;
 
-  const options = { logLevel: "none", output: "html", port: chrome.port };
+  const options = { logLevel: "info", output: "html", port: chrome.port, onlyCategories: ['performance'], };
 
   const runnerResult = await lighthouse(url, options, desktopConfig);
 
@@ -40,10 +40,12 @@ const SECONDS = 1000;
  */
  export async function writeLHResult(runnerResult, reportName) {
   const reportHTML = runnerResult.report;
-  const date = new Date().toISOString().replace(/:/g, "-");
   const reportJSON = JSON.stringify(runnerResult.lhr);
-  fs.writeFileSync(`${shortHash(reportName)}.html`, reportHTML);
-  fs.writeFileSync(`${shortHash(reportName)}.json`, reportJSON);
+  if (!fs.existsSync('./raw')) {
+    fs.mkdirSync('./raw');
+  }
+  fs.writeFileSync(`./raw/${shortHash(reportName)}.html`, reportHTML);
+  fs.writeFileSync(`./raw/${shortHash(reportName)}.json`, reportJSON);
 }
 
 /**
@@ -90,41 +92,9 @@ function loadTransferForPageVariants(pageName) {
  * broken down by file type.
  *
  */
-function analyseTransfer(lighthouseResult, skipWebArchive) {
-  const items = lighthouseResult.audits['network-requests'].details.items
-
-  function breakdownByType(transferByType, item) {
-
-
-    const fileTypes = [
-      "Document",
-      "Script",
-      "Stylesheet",
-      "Image",
-      "XHR",
-      "Font",
-    ]
-
-    // reject resource types we aren't interested in
-    if (!fileTypes.includes(item.resourceType)) {
-      return transferByType
-    }
-
-    // return early to skip counting web archive page furniture
-    // all urls from the original capture begin with the string below
-    const telltaleWebArchiveCapturePath = "web.archive.org/web"
-    if (!item.url.includes(telltaleWebArchiveCapturePath) && skipWebArchive) {
-      return transferByType
-    }
-
-    if (transferByType[item.resourceType]) {
-      transferByType[item.resourceType] += item.transferSize
-    } else {
-      transferByType[item.resourceType] = item.transferSize
-    }
-    return transferByType
-  }
-  return items.reduce(breakdownByType, {})
+export function analyseTransfer(lighthouseResult) {
+  const items = lighthouseResult.audits['resource-summary'].details.items
+  return items
 }
 /**
  * @param  {string} files - a set of file names from listing the
