@@ -11,7 +11,9 @@
   "author": "Fershad Irani",
   "license": "Apache-2.0",
   "devDependencies": {
+    "chrome-launcher": "^0.15.1",
     "lighthouse": "^9.6.7",
+    "short-hash": "^1.0.0",
     "simplecrawler": "^1.1.9"
   }
 }
