@@ -25,6 +25,6 @@ You can change the options that are set when running the demo:
 
 ## To-do
 
-- [] Concurrent lighthouse runs
-- [] Turn this into an NPM package that can be installed in a project
-- [] Add some tests
+- [ ] Concurrent lighthouse runs
+- [ ] Turn this into an NPM package that can be installed in a project
+- [ ] Add some tests
