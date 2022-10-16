@@ -9,9 +9,9 @@ const urls = []
 
 /**
  *
- * @param { String } siteUrl
- * @param { String } model
- * @param { Number } pageBudget
+ * @param {string} siteUrl
+ * @param {string} model
+ * @param {number} pageBudget
  *
  * Runs the crawler to generate a list of URLs.
  * These are then sequentially run through lighthouse.

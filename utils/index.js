@@ -85,8 +85,8 @@ export const calculatePageBudget = (budget, model) => {
 
 /**
  *
- * @param { String } contentType
- * @returns { Boolean }
+ * @param {string} contentType
+ * @returns {boolean}
  *
  * Checks if the content type passed in is contains the string "html".
  */

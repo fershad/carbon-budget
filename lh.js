@@ -3,7 +3,7 @@ import chromeLauncher from 'chrome-launcher'
 import desktopConfig from 'lighthouse/lighthouse-core/config/lr-desktop-config.js'
 
 /**
- * @param  {URL} url
+ * @param  {url} url
  * @return {object} - the lighthouse results
  *
  * Accept an url, and use chrome to run a Lighthouse against the given url
