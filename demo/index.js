@@ -4,11 +4,13 @@ import { crawlSite } from '../index.js'
  *
  * @param {string} siteUrl
  * @param {string} model
- * @param {number} pageBudget
+ * @param {Budget} budget
  */
 
 crawlSite({
     siteUrl: 'https://aremythirdpartiesgreen.com/',
     model: 'swd',
-    pageBudget: 0.15,
+    budget: {
+        kb: 42,
+    },
 })

@@ -47,7 +47,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
         spinner.succeed(`Crawling complete - ${urls.length} URLs found.`)
         console.log('============')
         const data = []
-        console.log('Running Lighthouse', 'color: #ebebeb')
+        console.log('Running Lighthouse')
         for (const url of urls) {
             const lhSpinner = ora(`Running Lighthouse on ${new URL(url).pathname}`).start()
             const result = await lighthouse(url)
