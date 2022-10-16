@@ -37,6 +37,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
     })
 
     crawler.on('complete', async () => {
+        const timestamp = Date.now()
         spinner.succeed(`Crawling complete - ${urls.length} URLs found.`)
         console.log('============')
         const data = []
@@ -99,9 +100,9 @@ export const crawl = (siteUrl, model, pageBudget) => {
             console.table(output)
         }
 
-        writeResults(output, siteUrl, 'all-pages')
+        writeResults(output, siteUrl, 'all-pages', timestamp)
         if (overBudget.length > 0) {
-            writeResults(overBudget, siteUrl, 'over-budget')
+            writeResults(overBudget, siteUrl, 'over-budget', timestamp)
         }
     })
 

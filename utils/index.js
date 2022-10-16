@@ -96,14 +96,14 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
  * @param {object} lhr - a Lighthouse Result object
  * @param {string} url
  * @param {string} resultType
+ * @param {string} timestamp
  *
  * Writes the results of the data transfer/co2 calculations to a file.
  */
-export async function writeResults(lhr, url, resultType) {
+export async function writeResults(lhr, url, resultType, timestamp) {
     const reportJSON = JSON.stringify(lhr)
     const { hostname } = new URL(url)
     const slug = slugify(hostname)
-    const timestamp = Date.now()
     if (!fs.existsSync(`./results`)) {
         fs.mkdirSync(`./results`)
         fs.mkdirSync(`./results/${slug}-${timestamp}`)
