@@ -13,7 +13,7 @@ export const slugify = (value) => {
     // remove any double dashes, leading and trailing dashes
     const cleanSlug = slug.replace(/--/g, '-').replace(/^-|-$/g, '')
 
-    return cleanSlug.length > 0 ? cleanSlug : 'index'
+    return cleanSlug
 }
 
 /**
@@ -101,9 +101,11 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
  */
 export async function writeResults(lhr, url, resultType) {
     const reportJSON = JSON.stringify(lhr)
-    const slug = slugify(url)
+    const { hostname } = new URL(url)
+    const slug = slugify(hostname)
     const timestamp = Date.now()
-    if (!fs.existsSync(`./results/${slug}-${timestamp}`)) {
+    if (!fs.existsSync(`./results`)) {
+        fs.mkdirSync(`./results`)
         fs.mkdirSync(`./results/${slug}-${timestamp}`)
     }
     fs.writeFileSync(`./results/${slug}-${timestamp}/${resultType}.json`, reportJSON)
