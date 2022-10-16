@@ -1,7 +1,14 @@
+/**
+ * @typedef {{ site: string, model?: string, pageBudget?: number }} CreateOptions
+ */
+
 import { crawl } from './crawl.js'
+import { validateUrl } from './utils/validateUrl.js'
+import { checkModel } from './utils/checkModel.js'
 
-async function crawlSite() {
-    const crawlEmitter = crawl('http://localhost:8080')
+export async function crawlSite(CreateOptions) {
+    const { model, pageBudget, siteUrl } = CreateOptions
+    validateUrl(siteUrl)
+    checkModel(model)
+    crawl(siteUrl, model, pageBudget)
 }
-
-crawlSite()
