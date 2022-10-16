@@ -1,5 +1,6 @@
 import Crawler from 'simplecrawler'
 import { co2 } from '@tgwf/co2'
+import ora from 'ora'
 import { runLighthouse, writeResults, analyseTransfer } from './lh.js'
 import { estimateEmissions } from './utils/co2.js'
 
@@ -15,6 +16,8 @@ const urls = []
  */
 export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().includes('html')
 
+const baseStyles = ['color: #fff', 'background-color: #444', 'padding: 2px 4px', 'border-radius: 2px'].join(';')
+
 /**
  *
  * @param { String } siteUrl
@@ -26,6 +29,7 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
  * It might take a while for a large site, so grab a cup of tea.
  */
 export const crawl = (siteUrl, model, pageBudget) => {
+    const spinner = ora('Crawling site').start()
     const crawler = new Crawler(siteUrl)
     const co2js = new co2({
         model: model || 'swd',
@@ -42,17 +46,25 @@ export const crawl = (siteUrl, model, pageBudget) => {
     })
 
     crawler.on('complete', async () => {
+        spinner.succeed(`Crawling complete - ${urls.length} URLs found.`)
+        console.log('============')
         const data = []
+        console.log('Running Lighthouse', 'color: #ebebeb')
         for (const url of urls) {
+            const lhSpinner = ora(`Running Lighthouse on ${new URL(url).pathname}`).start()
             const result = await lighthouse(url)
             // await writeLHResult(result, url)
             const transfer = analyseTransfer(result.lhr)
             data.push({ url, transfer })
+            lhSpinner.succeed()
         }
 
         // Loop through each URL and calculate the emissions for each data type
         const output = []
+        console.log('============')
+        console.log('Calculating emissions')
         for (const { url, transfer } of data) {
+            const analysisSpinner = ora(`Analysing results for ${new URL(url).pathname}`).start()
             const details = {}
 
             const total = {
@@ -70,6 +82,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
             }
 
             output.push({ url, total, details })
+            analysisSpinner.succeed()
         }
 
         console.table(output)

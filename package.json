@@ -36,6 +36,7 @@
     "@tgwf/co2": "^0.11.3",
     "chrome-launcher": "^0.15.1",
     "lighthouse": "^9.6.7",
+    "ora": "^6.1.2",
     "prettier": "^2.7.1",
     "simplecrawler": "^1.1.9"
   }
