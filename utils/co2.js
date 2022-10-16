@@ -10,5 +10,5 @@ const model = new co2({
  */
 export const estimateEmissions = (bytes) => {
     const emissions = model.perByte(bytes)
-    return emissions.toFixed(5)
+    return Number(emissions.toFixed(5))
 }
