@@ -1,4 +1,5 @@
 import { co2 as tgwf } from '@tgwf/co2'
+import fs from 'fs'
 
 /**
  *
@@ -90,3 +91,20 @@ export const calculatePageBudget = (budget, model) => {
  * Checks if the content type passed in is contains the string "html".
  */
 export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().includes('html')
+
+/**
+ * @param {object} lhr - a Lighthouse Result object
+ * @param {string} url
+ * @param {string} resultType
+ *
+ * Writes the results of the data transfer/co2 calculations to a file.
+ */
+export async function writeResults(lhr, url, resultType) {
+    const reportJSON = JSON.stringify(lhr)
+    const slug = slugify(url)
+    const timestamp = Date.now()
+    if (!fs.existsSync(`./results/${slug}-${timestamp}`)) {
+        fs.mkdirSync(`./results/${slug}-${timestamp}`)
+    }
+    fs.writeFileSync(`./results/${slug}-${timestamp}/${resultType}.json`, reportJSON)
+}

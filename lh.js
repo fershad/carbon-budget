@@ -1,8 +1,6 @@
-import fs from 'fs'
 import lighthouse from 'lighthouse'
 import chromeLauncher from 'chrome-launcher'
 import desktopConfig from 'lighthouse/lighthouse-core/config/lr-desktop-config.js'
-import { sanitiseUrlPath } from './utils/index.js'
 
 /**
  * @param  {URL} url
@@ -39,20 +37,6 @@ export async function runLighthouse(url) {
 //     // fs.writeFileSync(`./raw/${shortHash(reportName)}.html`, reportHTML)
 //     fs.writeFileSync(`./raw/${sanitiseUrlPath(reportName)}.json`, reportJSON)
 // }
-
-/**
- * @param  {Object} lhr - a Lighthouse Result object
- *
- * Writes the results of the data transfer/co2 calculations to a file.
- */
-export async function writeResults(lhr) {
-    const reportJSON = JSON.stringify(lhr)
-    const timestamp = Date.now()
-    if (!fs.existsSync('./results')) {
-        fs.mkdirSync('./results')
-    }
-    fs.writeFileSync(`./results/${timestamp}.json`, reportJSON)
-}
 
 /**
  * @param  {LighthouseResultObject} lighthouseResult
