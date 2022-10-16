@@ -1,20 +1,11 @@
 import Crawler from 'simplecrawler'
 import { co2 } from '@tgwf/co2'
 import ora from 'ora'
-import { runLighthouse, writeResults, analyseTransfer } from './lh.js'
-import { estimateEmissions } from './utils/index.js'
+import { runLighthouse, analyseTransfer } from './lh.js'
+import { estimateEmissions, writeResults, isContentTypeHtml } from './utils/index.js'
 
 const lighthouse = runLighthouse
 const urls = []
-
-/**
- *
- * @param { String } contentType
- * @returns { Boolean }
- *
- * Checks if the content type passed in is contains the string "html".
- */
-export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().includes('html')
 
 /**
  *
@@ -33,6 +24,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
         model: model || 'swd',
     })
 
+    // Run the crawl on the website provided
     crawler.on('fetchcomplete', (queueItem, responseBuffer, response) => {
         const { url } = queueItem
         const contentType = response.headers['content-type']
@@ -40,6 +32,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
         const { statusCode } = response
         if (!contentType || !statusCode) return
 
+        // Add all urls that are found and are html to the urls array
         urls.push(url)
     })
 
@@ -48,6 +41,8 @@ export const crawl = (siteUrl, model, pageBudget) => {
         console.log('============')
         const data = []
         console.log('Running Lighthouse')
+
+        // Once the crawl is complete, run lighthouse on each url
         for (const url of urls) {
             const lhSpinner = ora(`Running Lighthouse on ${new URL(url).pathname}`).start()
             const result = await lighthouse(url)
@@ -57,20 +52,23 @@ export const crawl = (siteUrl, model, pageBudget) => {
             lhSpinner.succeed()
         }
 
-        // Loop through each URL and calculate the emissions for each data type
         const output = []
         const overBudget = []
         console.log('============')
         console.log('Calculating emissions')
+
+        // Loop through each URL and calculate the emissions for each data type based on lighthouse runs
         for (const { url, transfer } of data) {
             const analysisSpinner = ora(`Analysing results for ${new URL(url).pathname}`).start()
             const details = {}
 
+            // Work out the total emissions for the page
             const total = {
                 bytes: transfer.total,
                 co2: estimateEmissions(transfer.total, co2js),
             }
 
+            // Work out the emissions for each data type
             for (const [type, bytes] of Object.entries(transfer)) {
                 if (type !== 'total') {
                     details[type] = {
@@ -82,6 +80,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
 
             output.push({ url, total, details })
 
+            // If there's a pageBudget set, check the page is under budget
             if (pageBudget) {
                 if (total.co2 > pageBudget) {
                     const overBudgetBy = total.co2 - pageBudget
@@ -100,8 +99,10 @@ export const crawl = (siteUrl, model, pageBudget) => {
             console.table(output)
         }
 
-        writeResults(output)
-        writeResults(overBudget)
+        writeResults(output, siteUrl, 'all-pages')
+        if (overBudget.length > 0) {
+            writeResults(overBudget, siteUrl, 'over-budget')
+        }
     })
 
     crawler.start()
