@@ -1,4 +1,5 @@
 import Crawler from 'simplecrawler'
+import { co2 } from '@tgwf/co2'
 import { runLighthouse, writeResults, analyseTransfer } from './lh.js'
 import { estimateEmissions } from './utils/co2.js'
 
@@ -17,13 +18,18 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
 /**
  *
  * @param { String } siteUrl
+ * @param { String } model
+ * @param { Number } pageBudget
  *
  * Runs the crawler to generate a list of URLs.
  * These are then sequentially run through lighthouse.
  * It might take a while for a large site, so grab a cup of tea.
  */
-export const crawl = (siteUrl) => {
+export const crawl = (siteUrl, model, pageBudget) => {
     const crawler = new Crawler(siteUrl)
+    const co2js = new co2({
+        model: model || 'swd',
+    })
 
     crawler.on('fetchcomplete', (queueItem, responseBuffer, response) => {
         const { url } = queueItem
@@ -51,14 +57,14 @@ export const crawl = (siteUrl) => {
 
             const total = {
                 bytes: transfer.total,
-                co2: estimateEmissions(transfer.total),
+                co2: estimateEmissions(transfer.total, co2js),
             }
 
             for (const [type, bytes] of Object.entries(transfer)) {
                 if (type !== 'total') {
                     details[type] = {
                         bytes,
-                        co2: estimateEmissions(bytes),
+                        co2: estimateEmissions(bytes, co2js),
                     }
                 }
             }
