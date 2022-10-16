@@ -11,6 +11,6 @@ crawlSite({
     siteUrl: 'https://aremythirdpartiesgreen.com/',
     model: 'swd',
     budget: {
-        kb: 42,
+        kb: 420,
     },
 })
