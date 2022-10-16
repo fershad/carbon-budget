@@ -17,6 +17,11 @@ export const estimateEmissions = (bytes, co2js) => {
     return Number(emissions.toFixed(5))
 }
 
+/**
+ * @param {string}  url
+ * @return {boolean} - true if the url is a valid url
+ * @throws {Error} - if the url is not valid
+ */
 export const validateUrl = (url) => {
     try {
         new URL(url)
@@ -28,6 +33,14 @@ export const validateUrl = (url) => {
 
 const models = ['swd', '1byte']
 
+/**
+ *
+ * @param {string} model
+ * @returns {boolean}
+ *
+ * Checks if the model passed in is valid.
+ * Valid models are: swd, 1byte
+ */
 export const checkModel = (model) => {
     if (!models.includes(model)) {
         throw new Error(`Invalid model: "${model}". Valid models are: ${models.toString()}`)
