@@ -1,7 +1,7 @@
-import { crawl } from './crawl.js';
+import { crawl } from './crawl.js'
 
 async function crawlSite() {
-    const crawlEmitter = crawl('http://localhost:8080');
+    const crawlEmitter = crawl('http://localhost:8080')
 }
 
-crawlSite();
+crawlSite()
