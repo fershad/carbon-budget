@@ -1,9 +1,14 @@
 import { co2 as tgwf } from '@tgwf/co2'
 
-export const sanitiseUrlPath = (url) => {
-    const { pathname } = new URL(url)
+/**
+ *
+ * @param {string} value
+ *
+ * Slugifies the string provided to be used for file/folder names.
+ */
+export const slugify = (value) => {
     // slugify the pathname, replacing all special characters with a dash
-    const slug = pathname.replace(/[^a-zA-Z0-9]/g, '-')
+    const slug = value.replace(/[^a-zA-Z0-9]/g, '-')
     // remove any double dashes, leading and trailing dashes
     const cleanSlug = slug.replace(/--/g, '-').replace(/^-|-$/g, '')
 
@@ -13,6 +18,9 @@ export const sanitiseUrlPath = (url) => {
 /**
  * @param {number} bytes
  * @returns {number} - the number of grams of CO2 emitted
+ *
+ * Takes the number of bytes and returns the number of grams of CO2 emitted.
+ * For more information on the calculation, see https://developers.thegreenwebfoundation.org/co2js/methods/#perbyte
  */
 export const estimateEmissions = (bytes, co2js) => {
     const emissions = co2js.perByte(bytes)
@@ -23,6 +31,8 @@ export const estimateEmissions = (bytes, co2js) => {
  * @param {string}  url
  * @return {boolean} - true if the url is a valid url
  * @throws {Error} - if the url is not valid
+ *
+ * Takes the url and checks if it is a valid url.
  */
 export const validateUrl = (url) => {
     try {
@@ -33,8 +43,6 @@ export const validateUrl = (url) => {
     }
 }
 
-const models = ['swd', '1byte']
-
 /**
  *
  * @param {string} model
@@ -44,6 +52,7 @@ const models = ['swd', '1byte']
  * Valid models are: swd, 1byte
  */
 export const checkModel = (model) => {
+    const models = ['swd', '1byte']
     if (!models.includes(model)) {
         throw new Error(`Invalid model: "${model}". Valid models are: ${models.toString()}`)
     }
@@ -72,3 +81,12 @@ export const calculatePageBudget = (budget, model) => {
 
     return Number(pageBudget.toFixed(5))
 }
+
+/**
+ *
+ * @param { String } contentType
+ * @returns { Boolean }
+ *
+ * Checks if the content type passed in is contains the string "html".
+ */
+export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().includes('html')
