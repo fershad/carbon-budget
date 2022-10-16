@@ -1,6 +1,6 @@
 import Crawler from 'simplecrawler'
 import { runLighthouse, writeLHResult, analyseTransfer } from './lh.js'
-import { estimateEmissions } from './co2.js'
+import { estimateEmissions } from './utils/co2.js'
 
 const lighthouse = runLighthouse
 const urls = []
