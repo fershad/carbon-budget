@@ -1,5 +1,6 @@
 import { co2 as tgwf } from '@tgwf/co2'
 import fs from 'fs'
+import path from 'path'
 
 /**
  *
@@ -103,10 +104,12 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
 export async function writeResults(lhr, url, resultType, timestamp) {
     const reportJSON = JSON.stringify(lhr)
     const { hostname } = new URL(url)
+    const pathname = path.dirname(new URL(import.meta.url).pathname);
+    const folder = path.join(pathname, `../../results`)
     const slug = slugify(hostname)
-    if (!fs.existsSync(`./results`)) {
-        fs.mkdirSync(`./results`)
-        fs.mkdirSync(`./results/${slug}-${timestamp}`)
+    if (!fs.existsSync(`${folder}`)) {
+        fs.mkdirSync(`${folder}`)
+        fs.mkdirSync(`${folder}/${slug}-${timestamp}`)
     }
-    fs.writeFileSync(`./results/${slug}-${timestamp}/${resultType}.json`, reportJSON)
+    fs.writeFileSync(`${folder}/${slug}-${timestamp}/${resultType}.json`, reportJSON)
 }
