@@ -11,6 +11,7 @@ crawlSite({
     siteUrl: 'https://aremythirdpartiesgreen.com/',
     model: 'swd',
     budget: {
+        // co2: 0.16,
         kb: 420,
     },
 })

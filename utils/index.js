@@ -56,8 +56,8 @@ export const checkModel = (model) => {
 export const calculatePageBudget = (budget, model) => {
     const { co2, kb } = budget
     let pageBudget
-    if (co2 && bytes) {
-        console.warn('Both co2 and bytes budgets were decalred. Using co2 budget.')
+    if (co2 && kb) {
+        console.warn('⚠️  Both co2 and kilobyte budgets were decalred. Using co2 budget.')
         pageBudget = co2
     } else if (kb) {
         const bytes = kb * 1000
@@ -65,7 +65,7 @@ export const calculatePageBudget = (budget, model) => {
             model: model || 'swd',
         })
         pageBudget = co2js.perByte(bytes)
-        console.warn(`Setting a page budget of ${pageBudget.toFixed(5)}g CO2e based on ${kb}kb.`)
+        console.warn(`ℹ️  Setting a page budget of ${pageBudget.toFixed(5)}g CO2e based on ${kb}kb.`)
     } else {
         pageBudget = co2
     }
