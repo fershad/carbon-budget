@@ -2,7 +2,7 @@ import Crawler from 'simplecrawler'
 import { co2 } from '@tgwf/co2'
 import ora from 'ora'
 import { runLighthouse, writeResults, analyseTransfer } from './lh.js'
-import { estimateEmissions } from './utils/co2.js'
+import { estimateEmissions } from './utils/index.js'
 
 const lighthouse = runLighthouse
 const urls = []
@@ -15,8 +15,6 @@ const urls = []
  * Checks if the content type passed in is contains the string "html".
  */
 export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().includes('html')
-
-const baseStyles = ['color: #fff', 'background-color: #444', 'padding: 2px 4px', 'border-radius: 2px'].join(';')
 
 /**
  *

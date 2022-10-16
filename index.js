@@ -3,8 +3,7 @@
  */
 
 import { crawl } from './crawl.js'
-import { validateUrl } from './utils/validateUrl.js'
-import { checkModel } from './utils/checkModel.js'
+import { validateUrl, checkModel } from './utils/index.js'
 
 export async function crawlSite(CreateOptions) {
     const { model, pageBudget, siteUrl } = CreateOptions
