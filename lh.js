@@ -1,8 +1,8 @@
 import fs from 'fs'
-import shortHash from 'short-hash'
 import lighthouse from 'lighthouse'
 import chromeLauncher from 'chrome-launcher'
 import desktopConfig from 'lighthouse/lighthouse-core/config/lr-desktop-config.js'
+import { sanitiseUrlPath } from './utils/index.js'
 
 /**
  * @param  {URL} url
@@ -15,7 +15,7 @@ import desktopConfig from 'lighthouse/lighthouse-core/config/lr-desktop-config.j
  */
 export async function runLighthouse(url) {
     const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless'] })
-    const options = { logLevel: 'info', output: 'html', port: chrome.port, onlyCategories: ['performance'] }
+    const options = { output: 'json', port: chrome.port, onlyCategories: ['performance'] }
 
     const runnerResult = await lighthouse(url, options, desktopConfig)
 
@@ -28,7 +28,7 @@ export async function runLighthouse(url) {
  * @param  {string} reportName -a string for the path on the file system to use.
  *
  * Take the Lighthouse result and write a JSON representation.
- * The report name is sanitized with short-hash.
+ * The report name is sanitised using the pathname.
  */
 export async function writeLHResult(runnerResult, reportName) {
     // const reportHTML = runnerResult.report
@@ -37,7 +37,7 @@ export async function writeLHResult(runnerResult, reportName) {
         fs.mkdirSync('./raw')
     }
     // fs.writeFileSync(`./raw/${shortHash(reportName)}.html`, reportHTML)
-    fs.writeFileSync(`./raw/${shortHash(reportName)}.json`, reportJSON)
+    fs.writeFileSync(`./raw/${sanitiseUrlPath(reportName)}.json`, reportJSON)
 }
 
 /**
@@ -49,5 +49,10 @@ export async function writeLHResult(runnerResult, reportName) {
  */
 export function analyseTransfer(lighthouseResult) {
     const { items } = lighthouseResult.audits['resource-summary'].details
-    return items
+    const transfer = items.reduce((acc, item) => {
+        acc[item.resourceType] = item.transferSize
+        return acc
+    }, {})
+
+    return transfer
 }

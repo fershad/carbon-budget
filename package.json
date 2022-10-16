@@ -36,7 +36,6 @@
     "chrome-launcher": "^0.15.1",
     "lighthouse": "^9.6.7",
     "prettier": "^2.7.1",
-    "short-hash": "^1.0.0",
     "simplecrawler": "^1.1.9"
   }
 }
