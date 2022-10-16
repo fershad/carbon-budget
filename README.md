@@ -20,9 +20,10 @@ You can change the options that are set when running the demo:
 - `siteUrl`: The base url of the site to be tested. The crawler will try to find all pages on the site from this url.
 - `model` (_optional_): The carbon estimation model to use. This project uses [CO2.js](https://github.com/thegreenwebfoundation/co2.js), so information about the available models can be found in the [CO2.js docs](https://developers.thegreenwebfoundation.org/co2js/models/).
 - `budget` (_optional_): An object containing either:
-
   - `kb`: A value (in kilobytes) that will be used to determine a suitable carbon budget for your site. This is recommended for people new to website carbon reporting.
   - `co2`: A value (in grams) for the per page carbon budget you want to set
+
+## To-do
 
 - [] Concurrent lighthouse runs
 - [] Turn this into an NPM package that can be installed in a project
