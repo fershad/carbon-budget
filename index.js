@@ -9,6 +9,10 @@ import { checkModel } from './utils/checkModel.js'
 export async function crawlSite(CreateOptions) {
     const { model, pageBudget, siteUrl } = CreateOptions
     validateUrl(siteUrl)
-    checkModel(model)
+
+    if (model) {
+        checkModel(model)
+    }
+
     crawl(siteUrl, model, pageBudget)
 }
