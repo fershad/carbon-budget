@@ -1,6 +1,6 @@
 # Carbon Budget
 
-⚠️⚠️ Still a work in progress ⚠️⚠️
+⚠️⚠️ **Still a work in progress** ⚠️⚠️
 
 A script that allows developers to set a per-page carbon budget for their website, and then run a scan over their entire site to find pages that exceed that budget. Like a performance budget, but for carbon emissions.
 
