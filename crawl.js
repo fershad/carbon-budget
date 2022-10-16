@@ -59,6 +59,7 @@ export const crawl = (siteUrl, model, pageBudget) => {
 
         // Loop through each URL and calculate the emissions for each data type
         const output = []
+        const overBudget = []
         console.log('============')
         console.log('Calculating emissions')
         for (const { url, transfer } of data) {
@@ -80,11 +81,27 @@ export const crawl = (siteUrl, model, pageBudget) => {
             }
 
             output.push({ url, total, details })
+
+            if (pageBudget) {
+                if (total.co2 > pageBudget) {
+                    const overBudgetBy = total.co2 - pageBudget
+                    overBudget.push({ url, co2: total.co2, overBudgetBy })
+                }
+            }
+
             analysisSpinner.succeed()
         }
 
-        console.table(output)
+        if (pageBudget) {
+            console.log('============')
+            console.log(`Page budget: ${pageBudget}gCO2. ${overBudget.length} pages over budget.`)
+            console.table(overBudget)
+        } else {
+            console.table(output)
+        }
+
         writeResults(output)
+        writeResults(overBudget)
     })
 
     crawler.start()

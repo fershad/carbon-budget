@@ -9,4 +9,6 @@ import { crawlSite } from '../index.js'
 
 crawlSite({
     siteUrl: 'https://aremythirdpartiesgreen.com/',
+    model: 'swd',
+    pageBudget: 0.15,
 })
