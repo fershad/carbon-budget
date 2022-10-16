@@ -1,5 +1,5 @@
 import Crawler from 'simplecrawler'
-import { runLighthouse, writeLHResult, analyseTransfer } from './lh.js'
+import { runLighthouse, writeResults, analyseTransfer } from './lh.js'
 import { estimateEmissions } from './utils/co2.js'
 
 const lighthouse = runLighthouse
@@ -20,6 +20,7 @@ export const isContentTypeHtml = (contentType) => contentType?.toLowerCase().inc
  *
  * Runs the crawler to generate a list of URLs.
  * These are then sequentially run through lighthouse.
+ * It might take a while for a large site, so grab a cup of tea.
  */
 export const crawl = (siteUrl) => {
     const crawler = new Crawler(siteUrl)
@@ -46,16 +47,27 @@ export const crawl = (siteUrl) => {
         // Loop through each URL and calculate the emissions for each data type
         const output = []
         for (const { url, transfer } of data) {
-            const results = {}
+            const details = {}
+
+            const total = {
+                bytes: transfer.total,
+                co2: estimateEmissions(transfer.total),
+            }
+
             for (const [type, bytes] of Object.entries(transfer)) {
-                results[type] = {
-                    url,
-                    bytes,
-                    co2: estimateEmissions(bytes),
+                if (type !== 'total') {
+                    details[type] = {
+                        bytes,
+                        co2: estimateEmissions(bytes),
+                    }
                 }
             }
-            output.push(results)
+
+            output.push({ url, total, details })
         }
+
+        console.table(output)
+        writeResults(output)
     })
 
     crawler.start()
