@@ -1,4 +1,4 @@
-import { crawlSite } from '../src/index.js'
+import crawlSite from '../src/index.js'
 
 /**
  *

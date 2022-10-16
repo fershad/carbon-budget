@@ -13,7 +13,7 @@ import { validateUrl, checkModel, calculatePageBudget } from './utils/index.js'
  * Runs checks on the options passed in.
  * Then, crawls the site and returns the results.
  */
-export async function crawlSite(CreateOptions) {
+export default async function crawlSite(CreateOptions) {
     const { model, budget, siteUrl } = CreateOptions
     validateUrl(siteUrl)
 
