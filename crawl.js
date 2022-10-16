@@ -38,18 +38,23 @@ export const crawl = (siteUrl) => {
         const data = []
         for (const url of urls) {
             const result = await lighthouse(url)
-            await writeLHResult(result, url)
+            // await writeLHResult(result, url)
             const transfer = analyseTransfer(result.lhr)
             data.push({ url, transfer })
         }
 
         // Loop through each URL and calculate the emissions for each data type
+        const output = []
         for (const { url, transfer } of data) {
-            const emissions = {}
+            const results = {}
             for (const [type, bytes] of Object.entries(transfer)) {
-                emissions[type] = estimateEmissions(bytes)
+                results[type] = {
+                    url,
+                    bytes,
+                    co2: estimateEmissions(bytes),
+                }
             }
-            console.log({ url, emissions })
+            output.push(results)
         }
     })
 

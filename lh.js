@@ -30,15 +30,15 @@ export async function runLighthouse(url) {
  * Take the Lighthouse result and write a JSON representation.
  * The report name is sanitised using the pathname.
  */
-export async function writeLHResult(runnerResult, reportName) {
-    // const reportHTML = runnerResult.report
-    const reportJSON = JSON.stringify(runnerResult.lhr)
-    if (!fs.existsSync('./raw')) {
-        fs.mkdirSync('./raw')
-    }
-    // fs.writeFileSync(`./raw/${shortHash(reportName)}.html`, reportHTML)
-    fs.writeFileSync(`./raw/${sanitiseUrlPath(reportName)}.json`, reportJSON)
-}
+// export async function writeLHResult(runnerResult, reportName) {
+//     // const reportHTML = runnerResult.report
+//     const reportJSON = JSON.stringify(runnerResult.lhr)
+//     if (!fs.existsSync('./raw')) {
+//         fs.mkdirSync('./raw')
+//     }
+//     // fs.writeFileSync(`./raw/${shortHash(reportName)}.html`, reportHTML)
+//     fs.writeFileSync(`./raw/${sanitiseUrlPath(reportName)}.json`, reportJSON)
+// }
 
 /**
  * @param  {LighthouseResultObject} lighthouseResult
